@@ -8,10 +8,21 @@
 
 namespace ActiveAuth;
 
-
+/**
+ * Interface TwoFactorAuthenticationInterface
+ * @package ActiveAuth
+ */
 interface TwoFactorAuthenticationInterface
 {
+    /**
+     * @param $username
+     * @return mixed
+     */
     public function signIn($username);
 
+    /**
+     * @param $response
+     * @return mixed
+     */
     public function verify($response);
 }

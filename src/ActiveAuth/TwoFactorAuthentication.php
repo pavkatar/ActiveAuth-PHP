@@ -14,11 +14,24 @@ use ActiveAuth\Exception\MissingConfigException;
 use ActiveAuth\Exception\UnauthorizedException;
 use ActiveAuth\Exception\RequestFaildException;
 
+/**
+ * Class TwoFactorAuthentication
+ * @package ActiveAuth
+ */
 class TwoFactorAuthentication implements TwoFactorAuthenticationInterface, ConfigAwareInterface
 {
+    /**
+     * @var config - stores the main config with keys and etc to the server
+     */
     private $config;
+    /**
+     * @var client - Stores the guzzle object to the activeauth server
+     */
     private $client;
 
+    /**
+     * @param array $config
+     */
     public function __construct(array $config = array())
     {
         if (count($config)) {
@@ -26,6 +39,10 @@ class TwoFactorAuthentication implements TwoFactorAuthenticationInterface, Confi
         }
     }
 
+    /**
+     * @param $username for the activeauth.me control panel
+     * @return string
+     */
     public function signIn($username)
     {
         $applicationSignature = $this->generateSignature($username, 'APP', 3600);
@@ -34,6 +51,11 @@ class TwoFactorAuthentication implements TwoFactorAuthenticationInterface, Confi
         return $applicationSignature . ':' . $serverSignature;
     }
 
+    /**
+     * @param $response
+     * @return mixed
+     * @throws UnauthorizedException
+     */
     public function verify($response)
     {
         list($serverResponse, $applicationResponse) = explode(':', $response);
@@ -47,12 +69,22 @@ class TwoFactorAuthentication implements TwoFactorAuthenticationInterface, Confi
         return $serverUser;
     }
 
+    /**
+     * @param $username
+     */
     public function getDevices($username)
     {
         //Todo: Implement this method in the server
 
     }
 
+    /**
+     * @param $username for the activeauth.me control panel
+     * @param $deviceId the device on witch we will send the requests
+     * @return array
+     * @throws MissingConfigException
+     * @throws RequestFaildException
+     */
     public function checkDevice($username, $deviceId)
     {
         $options = array(
@@ -81,6 +113,12 @@ class TwoFactorAuthentication implements TwoFactorAuthenticationInterface, Confi
         throw new RequestFaildException('The status of the device: ' . $deviceId . " is not ok!");
     }
 
+    /**
+     * @param $username for the activeauth.me control panel
+     * @param $deviceId the device on witch we will send the requests
+     * @param $type
+     * @return mixed
+     */
     public function sendCode($username, $deviceId, $type)
     {
         switch ($type) {
@@ -93,6 +131,13 @@ class TwoFactorAuthentication implements TwoFactorAuthenticationInterface, Confi
         }
     }
 
+    /**
+     * @param $username for the activeauth.me control panel
+     * @param $deviceId the device on witch we will send the requests
+     * @param $type
+     * @return mixed
+     * @throws MissingConfigException
+     */
     public function sendCall($username, $deviceId, $type)
     {
         $options = array(
@@ -112,6 +157,13 @@ class TwoFactorAuthentication implements TwoFactorAuthenticationInterface, Confi
         return $result;
     }
 
+    /**
+     * @param $username for the activeauth.me control panel
+     * @param $deviceId the device on witch we will send the requests
+     * @param $code
+     * @return mixed
+     * @throws MissingConfigException
+     */
     public function verifyCode($username, $deviceId, $code)
     {
         //Todo: implement remember me
@@ -132,6 +184,12 @@ class TwoFactorAuthentication implements TwoFactorAuthenticationInterface, Confi
         return $result;
     }
 
+    /**
+     * @param $username for the activeauth.me control panel
+     * @param bool $iframe
+     * @return \GuzzleHttp\Stream\StreamInterface|mixed|null|string
+     * @throws MissingConfigException
+     */
     public function get2FABox($username, $iframe = true)
     {
         $params = http_build_query(array(
@@ -153,6 +211,9 @@ class TwoFactorAuthentication implements TwoFactorAuthenticationInterface, Confi
     }
 
 
+    /**
+     * @return Client
+     */
     public function getClient()
     {
         if (!$this->client) {
@@ -168,12 +229,24 @@ class TwoFactorAuthentication implements TwoFactorAuthenticationInterface, Confi
         return $this->client;
     }
 
+    /**
+     * @param BeforeEvent $event
+     * @param $name
+     */
     public function prepareClientRequest(BeforeEvent $event, $name)
     {
         $event->getRequest()->setHeader('Accept', 'application/hal+json;');
         $event->getRequest()->setHeader('User-Agent', 'ApiHawkClient');
     }
 
+    /**
+     * @param $username
+     * @param $prefix
+     * @param int $expire
+     * @return string
+     * @throws MissingConfigException
+     * @throws \Exception
+     */
     private function generateSignature($username, $prefix, $expire = 3600)
     {
         $expireTime = time() + $expire;
@@ -183,6 +256,13 @@ class TwoFactorAuthentication implements TwoFactorAuthenticationInterface, Confi
         return $infoString . '|' . $signature;
     }
 
+    /**
+     * @param $signature
+     * @param $prefix
+     * @return mixed
+     * @throws UnauthorizedException
+     * @throws \Exception
+     */
     private function validateSignatureData($signature, $prefix)
     {
         $key = $this->getKey($prefix);
@@ -202,6 +282,12 @@ class TwoFactorAuthentication implements TwoFactorAuthenticationInterface, Confi
         return $user;
     }
 
+    /**
+     * @param $prefix
+     * @return mixed
+     * @throws MissingConfigException
+     * @throws \Exception
+     */
     private function getKey($prefix)
     {
         switch ($prefix) {
@@ -214,6 +300,10 @@ class TwoFactorAuthentication implements TwoFactorAuthenticationInterface, Confi
         }
     }
 
+    /**
+     * @return mixed
+     * @throws MissingConfigException
+     */
     public function getConfig()
     {
         if (!count($this->config)) {
@@ -222,6 +312,10 @@ class TwoFactorAuthentication implements TwoFactorAuthenticationInterface, Confi
         return $this->config;
     }
 
+    /**
+     * @param array $config
+     * @return $this
+     */
     public function setConfig(array $config)
     {
         $this->config = $config;
