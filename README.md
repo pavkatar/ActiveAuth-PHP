@@ -27,7 +27,7 @@ perl -e 'print join "", map { sprintf "%08X", rand(0xffffffff) } 1 .. 5'
 After you perform primary authentication (username and password), you should prepare signature for the secondary authentication process by calling `ActiveAut::sign` method:
 
 ```
-$activeAuth = new AzureCoastAuthenticator();
+$activeAuth = new ActiveAuth();
 $secret = $activeAuth->sing($username, $ikey, $skey, $akey);
 ```
 
@@ -67,7 +67,7 @@ Where:
 After the user authenticates (e.g. via mobile push, phone call, SMS passcode, etc.) the IFRAME will generate a signed response and send it back to the JavaScript which will POST to `ACAAction` specified in the previous step. Your server-side code should then call `ActiveAuth::verify()` to verify that the signed response is legitimate:
 
 ```
-$activeAuth = new AzureCoastAuthenticator();
+$activeAuth = new ActiveAuth();
 $response = $_POST['2fa-verify'];
 $status = $activeAuth->verify($response, $skey, $akey);
 ```
