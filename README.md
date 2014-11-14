@@ -64,7 +64,7 @@ Where:
 
 ### 4. Verify the response
 
-After the user authenticates (e.g. via mobile push, phone call, SMS passcode, etc.) the IFRAME will generate a signed response and will send it back to the JavaScript. It will make a POST call to `ACAAction` specified in the previous step. Your server-side code should then call `ActiveAuth::verify()` to verify that the signed response is legitimate:
+After the user authenticates (e.g. via mobile push, phone call, SMS passcode, etc.) the IFRAME will generate a signed response and will send it back to the JavaScript. It will make a POST call to `ACAAction` specified in the previous step. Your server-side code should then call `verify` to verify that the signed response is legitimate:
 
 ```
 $activeAuth = new ActiveAuth();
