@@ -1,0 +1,53 @@
+{
+  "name": "activeauth/activeauth-php",
+  "type": "library",
+  "description": "ActiveAuths is a two-factor authentication for any web login form",
+  "keywords": [
+    "aciveauth",
+    "http",
+    "auth",
+    "2fa",
+    "factor",
+    "authentication",
+    "sdk"
+  ],
+  "homepage": "http://activeauth.me/",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Pavel Nikolov",
+      "email": "p.nikolov@apihawk.com",
+      "homepage": "https://github.com/pavkatar"
+    },
+    {
+      "name": "Georgi Velinov",
+      "email": "g.velinov@apihawk.com",
+      "homepage": "https://github.com/gvelinov"
+    },
+    {
+      "name": "Anton Katsarov",
+      "email": "anton@webface.bg",
+      "homepage": "https://github.com/webfacebg"
+    }
+  ],
+  "require": {
+    "php": ">=5.4",
+    "guzzlehttp/guzzle": "*"
+  },
+  "autoload": {
+    "psr-0": {
+      "ActiveAuth": "src/",
+      "ActiveAuth\\Tests": "tests/"
+    }
+  },
+  "require-dev": {
+    "psr/log": "~1.0",
+    "phpunit/phpunit": "3.7.*"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "3.9-dev"
+    }
+  }
+}
+
