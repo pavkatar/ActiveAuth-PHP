@@ -12,7 +12,7 @@ Package:
 
 ## Usage
 
-### 0. Befor you start generate application key:
+### 0. Before you start generate application key:
 
 Your application key (or akey) is a string that you should generate and keep secret from ActiveAuth. It should be 40 characters long and stored alongside your integration key, secret key, integration account and integration server in configuration. This should be done once.
 
@@ -24,7 +24,7 @@ perl -e 'print join "", map { sprintf "%08X", rand(0xffffffff) } 1 .. 5'
 
 ### 1. Sign your request
 
-After you perform primary authentication (username and password), you should prepare signature for the secondary authentication process by calling `ActiveAut::sign` method:
+After you perform primary authentication (username and password), you should prepare signature for the secondary authentication process by calling the `sign` method:
 
 ```
 $activeAuth = new ActiveAuth();
@@ -64,7 +64,7 @@ Where:
 
 ### 4. Verify the response
 
-After the user authenticates (e.g. via mobile push, phone call, SMS passcode, etc.) the IFRAME will generate a signed response and send it back to the JavaScript which will POST to `ACAAction` specified in the previous step. Your server-side code should then call `ActiveAuth::verify()` to verify that the signed response is legitimate:
+After the user authenticates (e.g. via mobile push, phone call, SMS passcode, etc.) the IFRAME will generate a signed response and will send it back to the JavaScript. It will make a POST call to `ACAAction` specified in the previous step. Your server-side code should then call `ActiveAuth::verify()` to verify that the signed response is legitimate:
 
 ```
 $activeAuth = new ActiveAuth();
@@ -78,7 +78,7 @@ Where:
 * `$skey` is the server key you get from ActiveAuth's control panel
 * `$akey` which is the application key you generated
 
-If sucessfully authenticated the returned value (`$status`) should be the e-mail of the authenticated user. Otherwise the method will return `undef`. After getting user's e-mail, you can create your application session for the sepcified user.
+If sucessfully authenticated the returned value (`$status`) should be the e-mail of the authenticated user. Otherwise the method will return `NULL`. After getting user's e-mail, you can create your application session for the sepcified user.
 
 
 
