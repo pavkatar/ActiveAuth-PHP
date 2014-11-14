@@ -28,7 +28,7 @@ After you perform primary authentication (username and password), you should pre
 
 ```
 $activeAuth = new ActiveAuth();
-$secret = $activeAuth->sing($username, $ikey, $skey, $akey);
+$secret = $activeAuth->sign($username, $ikey, $skey, $akey);
 ```
 
 Where:
